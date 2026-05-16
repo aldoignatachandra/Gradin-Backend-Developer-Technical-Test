@@ -11,7 +11,12 @@ use Illuminate\Http\Request;
 class CourierController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * List all couriers
+     *
+     * Retrieve a paginated list of couriers with optional search, filtering, and sorting capabilities.
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
     {
@@ -45,7 +50,12 @@ class CourierController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new courier
+     *
+     * Store a new courier in the database with the provided information.
+     *
+     * @param StoreCourierRequest $request
+     * @return JsonResponse
      */
     public function store(StoreCourierRequest $request): JsonResponse
     {
@@ -55,7 +65,12 @@ class CourierController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get a single courier
+     *
+     * Retrieve the details of a specific courier by its ID.
+     *
+     * @param Courier $courier
+     * @return JsonResponse
      */
     public function show(Courier $courier): JsonResponse
     {
@@ -63,7 +78,13 @@ class CourierController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a courier
+     *
+     * Update the information of an existing courier.
+     *
+     * @param UpdateCourierRequest $request
+     * @param Courier $courier
+     * @return JsonResponse
      */
     public function update(UpdateCourierRequest $request, Courier $courier): JsonResponse
     {
@@ -73,7 +94,12 @@ class CourierController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a courier
+     *
+     * Remove a courier from the database.
+     *
+     * @param Courier $courier
+     * @return JsonResponse
      */
     public function destroy(Courier $courier): JsonResponse
     {

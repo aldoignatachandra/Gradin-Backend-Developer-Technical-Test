@@ -15,6 +15,7 @@ A RESTful API for managing courier data with full CRUD operations, advanced sear
 - **Pagination** - Configurable page size with metadata
 - **Input Validation** - Comprehensive validation with Form Request classes
 - **Feature Tests** - 15 tests with 163 assertions
+- **Swagger UI** - Interactive API documentation at `/docs/api`
 
 ## Tech Stack
 
@@ -25,6 +26,7 @@ A RESTful API for managing courier data with full CRUD operations, advanced sear
 | Database   | SQLite (development) |
 | Testing    | PHPUnit 12           |
 | Code Style | Laravel Pint         |
+| API Docs   | Scramble (Swagger UI)|
 
 ## API Endpoints
 
@@ -33,6 +35,16 @@ A RESTful API for managing courier data with full CRUD operations, advanced sear
 ```
 /api/couriers
 ```
+
+### Swagger UI
+
+Interactive API documentation available at:
+
+```
+http://localhost:8000/docs/api
+```
+
+> **Note:** Start the development server first with `php artisan serve` or `composer run dev:api`
 
 ### Endpoints
 
@@ -252,6 +264,23 @@ Duration: 523ms
 ```
 
 ## Development
+
+### API Documentation (Swagger UI)
+
+Interactive API documentation powered by Scramble:
+
+```bash
+# Start server
+php artisan serve
+
+# Open in browser
+open http://localhost:8000/docs/api
+```
+
+**Features:**
+- Try It - Test API langsung dari browser
+- Auto Sync - Update kode = update docs otomatis
+- Zero Config - Tidak perlu annotation manual
 
 ### Code Style
 
