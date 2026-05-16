@@ -19,14 +19,14 @@ A RESTful API for managing courier data with full CRUD operations, advanced sear
 
 ## Tech Stack
 
-| Component  | Technology           |
-| ---------- | -------------------- |
-| Framework  | Laravel 13.9.0       |
-| PHP        | 8.4                  |
-| Database   | SQLite (development) |
-| Testing    | PHPUnit 12           |
-| Code Style | Laravel Pint         |
-| API Docs   | Scramble (Swagger UI)|
+| Component  | Technology            |
+| ---------- | --------------------- |
+| Framework  | Laravel 13.9.0        |
+| PHP        | 8.4                   |
+| Database   | SQLite (development)  |
+| Testing    | PHPUnit 12            |
+| Code Style | Laravel Pint          |
+| API Docs   | Scramble (Swagger UI) |
 
 ## API Endpoints
 
@@ -278,6 +278,7 @@ open http://localhost:8000/docs/api
 ```
 
 **Features:**
+
 - Try It - Test API langsung dari browser
 - Auto Sync - Update kode = update docs otomatis
 - Zero Config - Tidak perlu annotation manual
@@ -302,6 +303,7 @@ php artisan db:seed --class=CourierSeeder
 
 - GitHub: [@aldoignatachandra](https://github.com/aldoignatachandra)
 - LinkedIn: [in/aldoignatachandra](https://www.linkedin.com/in/aldoignatachandra/)
+- Web Portfolio: [ignata.dev](https://ignata.dev/)
 
 ## License
 
