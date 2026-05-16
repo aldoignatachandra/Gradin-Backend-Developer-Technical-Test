@@ -1,58 +1,279 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Gradin Backend Developer Technical Test
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Backend technical test implementation for Gradin - Courier CRUD API built with Laravel 13, following best practices and clean code principles.
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A RESTful API for managing courier data with full CRUD operations, advanced search, filtering, sorting, and pagination. Built with Laravel 13 and PHP 8.4, following industry best practices.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Key Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **CRUD Operations** - Create, Read, Update, Delete couriers
+- **Advanced Search** - Multi-word name search (e.g., `?search=budi+agung` matches "Budiono Hadi Agung")
+- **Level Filtering** - Filter by courier level (e.g., `?level=2,3`)
+- **Flexible Sorting** - Sort by name (default) or registration date
+- **Pagination** - Configurable page size with metadata
+- **Input Validation** - Comprehensive validation with Form Request classes
+- **Feature Tests** - 15 tests with 163 assertions
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Component  | Technology           |
+| ---------- | -------------------- |
+| Framework  | Laravel 13.9.0       |
+| PHP        | 8.4                  |
+| Database   | SQLite (development) |
+| Testing    | PHPUnit 12           |
+| Code Style | Laravel Pint         |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## API Endpoints
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Base URL
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+/api/couriers
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Endpoints
 
-## Contributing
+| Method   | Endpoint             | Description                   |
+| -------- | -------------------- | ----------------------------- |
+| `GET`    | `/api/couriers`      | List all couriers (paginated) |
+| `GET`    | `/api/couriers/{id}` | Get single courier            |
+| `POST`   | `/api/couriers`      | Create new courier            |
+| `PUT`    | `/api/couriers/{id}` | Update courier                |
+| `DELETE` | `/api/couriers/{id}` | Delete courier                |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Query Parameters (GET /api/couriers)
 
-## Code of Conduct
+| Parameter   | Type    | Description                           | Example               |
+| ----------- | ------- | ------------------------------------- | --------------------- |
+| `search`    | string  | Search by name (multi-word)           | `?search=budi+agung`  |
+| `level`     | string  | Filter by level (comma-separated)     | `?level=2,3`          |
+| `sort`      | string  | Sort field: `name` or `registered_at` | `?sort=registered_at` |
+| `direction` | string  | Sort direction: `asc` or `desc`       | `?direction=desc`     |
+| `per_page`  | integer | Items per page (default: 15)          | `?per_page=10`        |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Example Requests
 
-## Security Vulnerabilities
+**Search and filter:**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+GET /api/couriers?search=budi&level=2,3&sort=name&direction=asc
+```
+
+**Pagination:**
+
+```
+GET /api/couriers?per_page=10&page=2
+```
+
+## Database Schema
+
+### Couriers Table
+
+| Column          | Type      | Constraints                 |
+| --------------- | --------- | --------------------------- |
+| `id`            | bigint    | Primary key, auto-increment |
+| `name`          | string    | Required                    |
+| `email`         | string    | Required, unique            |
+| `phone`         | string    | Required                    |
+| `level`         | tinyint   | Required, 1-5, unsigned     |
+| `address`       | text      | Nullable                    |
+| `is_active`     | boolean   | Default: true               |
+| `registered_at` | timestamp | Nullable                    |
+| `created_at`    | timestamp | Auto                        |
+| `updated_at`    | timestamp | Auto                        |
+
+**Indexes:** `level`, `name`, `registered_at`
+
+## Installation
+
+### Prerequisites
+
+- PHP 8.3+
+- Composer
+- SQLite (or configure other database in `.env`)
+
+### Setup
+
+```bash
+# Clone repository
+git clone https://github.com/aldoignatachandra/Gradin-Backend-Developer-Technical-Test.git
+cd Gradin-Backend-Developer-Technical-Test
+
+# Install dependencies
+composer install
+
+# Environment setup
+cp .env.example .env
+php artisan key:generate
+
+# Database setup
+touch database/database.sqlite
+php artisan migrate --seed
+
+# Start development server
+php artisan serve
+```
+
+### Run Tests
+
+```bash
+# Run all tests
+php artisan test
+
+# Run with compact output
+php artisan test --compact
+
+# Run specific test file
+php artisan test --compact tests/Feature/CourierControllerTest.php
+```
+
+## Project Structure
+
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   └── CourierController.php      # CRUD operations
+│   └── Requests/
+│       ├── StoreCourierRequest.php    # Create validation
+│       └── UpdateCourierRequest.php   # Update validation
+├── Models/
+│   └── Courier.php                    # Eloquent model
+
+database/
+├── factories/
+│   └── CourierFactory.php             # Test data factory
+├── migrations/
+│   └── create_couriers_table.php      # Database schema
+└── seeders/
+    └── CourierSeeder.php              # Sample data
+
+routes/
+└── api.php                            # API routes
+
+tests/
+└── Feature/
+    └── CourierControllerTest.php      # Feature tests
+```
+
+## Best Practices Applied
+
+### Architecture
+
+- ✅ **Form Request Validation** - Separate validation classes
+- ✅ **Implicit Route Model Binding** - Automatic model resolution
+- ✅ **API Resources** - RESTful conventions with `apiResource()`
+- ✅ **Thin Controllers** - Business logic separated
+
+### Database
+
+- ✅ **Indexing** - Performance indexes on query columns
+- ✅ **Type Safety** - Proper column types and constraints
+- ✅ **Mass Assignment Protection** - `$fillable` defined
+
+### Testing
+
+- ✅ **Feature Tests** - Full HTTP lifecycle testing
+- ✅ **LazilyRefreshDatabase** - Optimized test performance
+- ✅ **Factory Pattern** - Consistent test data generation
+- ✅ **Expressive Assertions** - `assertModelExists`, `assertModelMissing`
+
+### Security
+
+- ✅ **Input Validation** - Strict validation rules
+- ✅ **SQL Injection Prevention** - Eloquent ORM
+- ✅ **Type Casting** - `intval()` for numeric inputs
+- ✅ **Whitelist Sorting** - Prevents arbitrary column sorting
+
+## Test Coverage
+
+```
+Tests: 15 passed, 15 total
+Assertions: 163
+Duration: 523ms
+```
+
+| Category                           | Tests | Coverage |
+| ---------------------------------- | ----- | -------- |
+| Index (list, search, filter, sort) | 5     | ✅       |
+| Show (success, 404)                | 2     | ✅       |
+| Store (create, validation)         | 3     | ✅       |
+| Update (success, validation)       | 2     | ✅       |
+| Destroy (delete, 404)              | 2     | ✅       |
+
+## API Response Examples
+
+### Success Response (200)
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Budi Santoso",
+      "email": "budi@example.com",
+      "phone": "08123456789",
+      "level": 3,
+      "address": "Jakarta",
+      "is_active": true,
+      "registered_at": "2024-01-15T10:30:00.000000Z",
+      "created_at": "2024-01-15T10:30:00.000000Z",
+      "updated_at": "2024-01-15T10:30:00.000000Z"
+    }
+  ],
+  "links": { ... },
+  "total": 50,
+  "current_page": 1,
+  "last_page": 4
+}
+```
+
+### Validation Error (422)
+
+```json
+{
+    "message": "The name field is required.",
+    "errors": {
+        "name": ["The name field is required."],
+        "email": ["The email field is required."]
+    }
+}
+```
+
+### Not Found (404)
+
+```json
+{
+    "message": "No query results for model [App\\Models\\Courier] 999"
+}
+```
+
+## Development
+
+### Code Style
+
+```bash
+# Format code with Pint
+vendor/bin/pint --dirty --format agent
+```
+
+### Database Seeding
+
+```bash
+# Seed with sample data
+php artisan db:seed --class=CourierSeeder
+```
+
+## Author
+
+**Aldo Ignata Chandra**
+
+- GitHub: [@aldoignatachandra](https://github.com/aldoignatachandra)
+- LinkedIn: [in/aldoignatachandra](https://www.linkedin.com/in/aldoignatachandra/)
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
