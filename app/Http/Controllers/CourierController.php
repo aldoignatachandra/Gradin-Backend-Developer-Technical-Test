@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCourierRequest;
 use App\Http\Requests\UpdateCourierRequest;
+use App\Http\Resources\CourierResource;
 use App\Models\Courier;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CourierController extends Controller
 {
@@ -14,11 +17,8 @@ class CourierController extends Controller
      * List all couriers
      *
      * Retrieve a paginated list of couriers with optional search, filtering, and sorting capabilities.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): ResourceCollection
     {
         $query = Courier::query();
 
@@ -46,7 +46,7 @@ class CourierController extends Controller
 
         $couriers = $query->paginate($request->input('per_page', 15));
 
-        return response()->json($couriers);
+        return CourierResource::collection($couriers);
     }
 
     /**
@@ -54,52 +54,43 @@ class CourierController extends Controller
      *
      * Store a new courier in the database with the provided information.
      *
-     * @param StoreCourierRequest $request
-     * @return JsonResponse
+     * @return JsonResource
      */
     public function store(StoreCourierRequest $request): JsonResponse
     {
         $courier = Courier::create($request->validated());
 
-        return response()->json($courier, 201);
+        return (new CourierResource($courier))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
      * Get a single courier
      *
      * Retrieve the details of a specific courier by its ID.
-     *
-     * @param Courier $courier
-     * @return JsonResponse
      */
-    public function show(Courier $courier): JsonResponse
+    public function show(Courier $courier): JsonResource
     {
-        return response()->json($courier);
+        return new CourierResource($courier);
     }
 
     /**
      * Update a courier
      *
      * Update the information of an existing courier.
-     *
-     * @param UpdateCourierRequest $request
-     * @param Courier $courier
-     * @return JsonResponse
      */
-    public function update(UpdateCourierRequest $request, Courier $courier): JsonResponse
+    public function update(UpdateCourierRequest $request, Courier $courier): JsonResource
     {
         $courier->update($request->validated());
 
-        return response()->json($courier);
+        return new CourierResource($courier);
     }
 
     /**
      * Delete a courier
      *
      * Remove a courier from the database.
-     *
-     * @param Courier $courier
-     * @return JsonResponse
      */
     public function destroy(Courier $courier): JsonResponse
     {

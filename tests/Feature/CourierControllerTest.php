@@ -23,12 +23,10 @@ class CourierControllerTest extends TestCase
         $response->assertOk()
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['id', 'name', 'email', 'phone', 'level', 'address', 'is_active', 'registered_at'],
+                    '*' => ['id', 'name', 'email', 'phone', 'level', 'address', 'is_active', 'registered_at', 'created_at', 'updated_at'],
                 ],
                 'links',
-                'total',
-                'current_page',
-                'last_page',
+                'meta',
             ]);
     }
 
@@ -90,7 +88,7 @@ class CourierControllerTest extends TestCase
         $response = $this->getJson("/api/couriers/{$courier->id}");
 
         $response->assertOk()
-            ->assertJsonFragment(['name' => $courier->name]);
+            ->assertJsonPath('data.name', $courier->name);
     }
 
     public function test_show_returns_404_for_nonexistent_courier(): void
@@ -119,7 +117,7 @@ class CourierControllerTest extends TestCase
         $response = $this->postJson('/api/couriers', $data);
 
         $response->assertCreated()
-            ->assertJsonFragment(['name' => 'Budi Santoso']);
+            ->assertJsonPath('data.name', 'Budi Santoso');
 
         $this->assertModelExists(Courier::where('email', 'budi@example.com')->first());
     }
@@ -173,7 +171,7 @@ class CourierControllerTest extends TestCase
         ]);
 
         $response->assertOk()
-            ->assertJsonFragment(['name' => 'Updated Name']);
+            ->assertJsonPath('data.name', 'Updated Name');
 
         $courier->refresh();
         $this->assertEquals('Updated Name', $courier->name);
