@@ -36,4 +36,21 @@ class Courier extends Model
             'registered_at' => 'datetime',
         ];
     }
+
+    /**
+     * Boot the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Courier $courier) {
+            $courier->email = strtolower($courier->email);
+            $courier->registered_at = $courier->registered_at ?? now();
+        });
+
+        static::updating(function (Courier $courier) {
+            if ($courier->isDirty('email')) {
+                $courier->email = strtolower($courier->email);
+            }
+        });
+    }
 }

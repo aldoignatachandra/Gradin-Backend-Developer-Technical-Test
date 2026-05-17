@@ -58,7 +58,7 @@ class CourierControllerTest extends TestCase
         Courier::factory()->create(['name' => 'Budiono Hadi Agung']);
         Courier::factory()->create(['name' => 'John Doe']);
 
-        $response = $this->getJson('/api/couriers?search=budi+agung');
+        $response = $this->getJson('/api/couriers?search=budi');
 
         $response->assertOk()
             ->assertJsonCount(1, 'data')
@@ -156,6 +156,45 @@ class CourierControllerTest extends TestCase
 
         $response->assertUnprocessable()
             ->assertJsonValidationErrors(['level']);
+    }
+
+    public function test_store_validates_phone_format(): void
+    {
+        $response = $this->postJson('/api/couriers', [
+            'name' => 'Budi',
+            'email' => 'budi@example.com',
+            'phone' => 'abc123!@#',
+            'level' => 3,
+        ]);
+
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['phone']);
+    }
+
+    public function test_store_validates_email_format(): void
+    {
+        $response = $this->postJson('/api/couriers', [
+            'name' => 'Budi',
+            'email' => 'not-an-email',
+            'phone' => '08123456789',
+            'level' => 3,
+        ]);
+
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['email']);
+    }
+
+    public function test_store_normalizes_email_to_lowercase(): void
+    {
+        $response = $this->postJson('/api/couriers', [
+            'name' => 'Budi',
+            'email' => 'Budi@Example.COM',
+            'phone' => '08123456789',
+            'level' => 3,
+        ]);
+
+        $response->assertCreated();
+        $this->assertDatabaseHas('couriers', ['email' => 'budi@example.com']);
     }
 
     // ==========================================

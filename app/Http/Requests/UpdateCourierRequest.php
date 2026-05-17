@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,14 +19,14 @@ class UpdateCourierRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'email', Rule::unique('couriers', 'email')->ignore($this->route('courier'))],
-            'phone' => ['sometimes', 'string', 'max:20'],
+            'phone' => ['sometimes', 'string', 'max:20', 'regex:/^[0-9+\-\s]+$/'],
             'level' => ['sometimes', 'integer', 'between:1,5'],
             'address' => ['nullable', 'string', 'max:500'],
             'is_active' => ['boolean'],

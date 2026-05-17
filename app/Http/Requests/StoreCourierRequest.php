@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,14 +19,14 @@ class StoreCourierRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', Rule::unique('couriers', 'email')],
-            'phone' => ['required', 'string', 'max:20'],
+            'phone' => ['required', 'string', 'max:20', 'regex:/^[0-9+\-\s]+$/'],
             'level' => ['required', 'integer', 'between:1,5'],
             'address' => ['nullable', 'string', 'max:500'],
             'is_active' => ['boolean'],

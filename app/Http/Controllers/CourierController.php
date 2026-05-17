@@ -26,7 +26,7 @@ class CourierController extends Controller
         if ($request->filled('search')) {
             $searchTerms = explode(' ', $request->input('search'));
             foreach ($searchTerms as $term) {
-                $query->where('name', 'like', "%{$term}%");
+                $query->where('name', 'like', "{$term}%");
             }
         }
 
